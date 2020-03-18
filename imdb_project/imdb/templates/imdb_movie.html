@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- DATA TABLE -->
+        <h2 class="heading-title m-b-35">{{ movie.name }}</h2>
+        <div>
+            <img src="{{ movie.movie_poster.url }}" height="300" width="300">
+        </div>
+        <div>
+            <p class="director-note">
+              {{ movie.name}} : {{ movie.movie_discription }}
+             </p>
+        </div>
+
+        <h3 class="title-3 m-b-45">Director: <a href="/imdb/director/{{ movie.director.id }}/">{{ movie.director.name }}</a></h3>
+
+        <h3 class="title-5 m-b-45">Actors</h3>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2">
+                {% if actors %}
+                <thead>
+                <tr>
+                    <th>Actor id</th>
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+                </thead>
+                
+                <tbody>
+                    {% for actor in actors %}
+                <tr class="tr-shadow">
+                    <td>{{ actor.actor.id }}</td>
+                    <td >
+                        <a href="/imdb/actor/{{ actor.actor.id }}/">{{ actor.actor.name }}</a>
+                    </td>
+                    <td>{{ actor.actor.date_of_birth }}</td>
+                    <td>
+                        {% for cast in actor.cast_list %}
+                        {{ cast.role }}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr class="spacer"></tr>
+                {% endfor %}
+                </tbody>
+                {% else %}
+                <tbody>
+                <tr class="tr-shadow">No actors available</tr>
+                </tbody>
+                {% endif %}
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+{% endblock %}

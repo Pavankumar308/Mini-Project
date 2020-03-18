@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- DATA TABLE -->
+        <h2 class="heading-title m-b-35">{{ director.name }} </h2>
+        <div>
+            <img src="{{ director.director_image.url }}" height="300" width="300">
+        </div>
+        <div>
+            <p class="director-note">
+                {{ director.name }}
+             </p>
+        </div>
+
+        <h3 class="title-5 m-b-45">Movies</h3>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2">
+                {% if movies %}
+                <thead>
+                <tr>
+                    <th>Movie id</th>
+                    <th>Name</th>
+                    <th>Release Date</th>
+                    <th>Average Rating</th>
+                    <th>Collections(in Crores.)</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for movie in movies %}
+                <tr class="tr-shadow">
+                    <td>{{ movie.id }}</td>
+                    <td class="desc">
+                        <a href="/imdb/movie/{{ movie.id }}/">{{ movie.name }}</a>
+                    </td>
+                    <td>{{ movie.release_date }}</td>
+                    <td>
+                        <span class="status--high">{{ movie.avg_rating }}</span>
+                    </td>
+                    <td>{{ movie.collections }}₹</td>
+                </tr>
+                <tr class="spacer"></tr>
+                {% endfor %}
+            </tbody>
+            {% else %}
+            <tbody>
+            <tr class="tr-shadow">No actors available</tr>
+            </tbody>
+            {% endif %}
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+{% endblock %}
