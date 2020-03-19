@@ -302,7 +302,7 @@ def populate_database_actors():
     actors_list = f.read()
     actors_list = json.loads(actors_list)
     for actor in actors_list:
-        date=datetime.date(randint(1850,2000), randint(1,12),randint(1,28))
+        date=datetime.date(randint(1850, 2000), randint(1,12),randint(1,28))
         if actor['fb_likes'] == '':
             actor['fb_likes'] = '0'
         a = Actor(actor_id=actor['actor_id'],name=actor['name'],  gender=actor['gender'], fb_likes=int(actor['fb_likes']), date_of_birth=date)
@@ -327,10 +327,36 @@ def populate_database_movies():
     movies_list = f.read()
     movies_list = json.loads(movies_list)
     for movie in movies_list:
+        if movie['likes_on_fb'] == '':
+            movie['likes_on_fb'] = '0'
+        if movie['budget'] == '':
+            movie['budget'] = '100'
+        if movie['year_of_release'] == '':
+            movie['year_of_release'] = '2000'
+        if movie['average_rating'] == '':
+            movie['average_rating'] = '0'
+        
+        movie_director = Director.objects.get(name=movie['director_name'])
         date =  date=datetime.date(int(movie['year_of_release']), randint(1,12),randint(1,28))
         movie_genre = choice(movie['genres'])
-        m = Movie.objects.create(movie_id=movie['movie_id'],
-            name=movie['name'],
-            release_date=date,
-            imdb_link=movie[]
-        )
+        try:
+            Movie.objects.get(movie_id=movie['movie_id'])
+        except Movie.DoesNotExist:
+            m = Movie.objects.create(movie_id=movie['movie_id'],
+                name=movie['name'],
+                release_date=date,
+                imdb_link=movie['imdb_link'],
+                avg_rating=float(movie['average_rating']),
+                budget=int(movie['budget']),
+                collections=movie['box_office_collection_in_crores'],
+                language=movie['language'],
+                country=movie['country'],
+                likes_on_fb=int(movie['likes_on_fb'],),
+                genre = movie_genre,
+                director=movie_director
+            )
+            m.save()
+            for actor in movie['actors']:
+                a = Actor.objects.get(actor_id=actor['actor_id'])
+                c = Cast.objects.create(actor=a, movie=m, role=a.name)
+                c.save()
