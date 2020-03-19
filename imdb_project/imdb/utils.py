@@ -20,35 +20,35 @@ def get_imdb_multi_line_plot_with_area_data():
 
     get_movies_1 = """
         SELECT COUNT(*),
-            AVG(avg_rating) 
+            AVG(avg_rating)*10
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '1980-01-01' AND '1990-01-01';
     """
     get_movies_2 = """
         SELECT COUNT(*),
-            AVG(avg_rating) 
+            AVG(avg_rating)*10
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '1990-01-01' AND '2000-01-01';
     """
     get_movies_3 = """
         SELECT COUNT(*),
-            AVG(avg_rating) 
+            AVG(avg_rating)*10
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '2000-01-01' AND '2010-01-01';
     """
     get_movies_4 = """
         SELECT COUNT(*),
-            AVG(avg_rating) 
+            AVG(avg_rating) *10
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '2010-01-01' AND '2020-01-01';
     """
     get_movies_5 = """
         SELECT COUNT(*),
-            AVG(avg_rating) 
+            AVG(avg_rating)*10
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '2020-01-01' AND '2030-01-01';
@@ -75,13 +75,13 @@ def get_imdb_multi_line_plot_with_area_data():
                 "label": "Avarage rating",
                 "borderColor": "rgba(200, 123, 255, 0.9)",
                 "borderWidth": "1",
-                "backgroundColor": "rgba(0, 123, 255, 0.5)",
+                "backgroundColor": "rgba(255, 0, 0, 0.9)",
                 "pointHighlightStroke": "rgba(26,179,148,1)",
-                "data": [execute_sql_query(get_movies_1)[0][1],  
-                            execute_sql_query(get_movies_2)[0][1],
-                            execute_sql_query(get_movies_3)[0][1], 
-                            execute_sql_query(get_movies_4)[0][1],
-                            execute_sql_query(get_movies_5)[0][1]
+                "data": [(execute_sql_query(get_movies_1)[0][1]),  
+                            (execute_sql_query(get_movies_2)[0][1]),
+                            (execute_sql_query(get_movies_3)[0][1]), 
+                            (execute_sql_query(get_movies_4)[0][1]),
+                            (execute_sql_query(get_movies_5)[0][1])
                 ]
             }
         ]
@@ -103,7 +103,7 @@ def get_imdb_multi_line_plot_data():
         FROM imdb_movie AS m 
             INNER JOIN imdb_director AS d
             ON d.id = m.director_id
-        GROUP BY d.id
+        GROUP BY d.id HAVING COUNT(*) >= 20
         ORDER BY AVG(m.avg_rating) DESC
         LIMIT 5;
     """
@@ -113,7 +113,12 @@ def get_imdb_multi_line_plot_data():
     no_of_movies = []
     success_rate = []
     for item in query_list:
-        director_list.append(item[0])
+        if ' ' in item[0]:
+            name = item[0].split()
+            name_1 = name[0]
+        else:
+            name_1 = item[0]
+        director_list.append(name_1)
         no_of_movies.append(item[1])
         success_rate.append(item[2])
 
@@ -153,7 +158,7 @@ def get_imdb_two_bar_plot_data():
     import json
 
     query = """
-        SELECT AVG(m.avg_rating), COUNT(*)
+        SELECT ROUND(AVG(m.avg_rating)*10, 2), COUNT(*)
         FROM imdb_movie AS m 
         GROUP BY strftime('%m', m.release_date)
         ORDER BY strftime('%m', m.release_date);
@@ -189,7 +194,7 @@ def get_imdb_two_bar_plot_data():
 
     return {
         'multi_bar_plot_data_one': json.dumps(multi_bar_plot_data),
-        'multi_bar_plot_data_one_title': 'Movies and Actors'
+        'multi_bar_plot_data_one_title': 'Movies and Avarage rating'
     }
 
 def single_imdb_bar_chart_data_one():
@@ -201,7 +206,8 @@ def single_imdb_bar_chart_data_one():
         FROM imdb_movie AS m
         INNER JOIN imdb_cast AS c
             ON c.movie_id = m.movie_id
-        GROUP BY m.genre;
+        GROUP BY m.genre
+        HAVING COUNT(*) > 700;
     """
     query_list = list(set(execute_sql_query(query)))
     genre_list = []
@@ -255,9 +261,9 @@ def get_imdb_polar_chart_data():
             ON d.id = m.director_id)
         INNER JOIN imdb_cast AS c
         ON m.movie_id = c.movie_id
-        GROUP BY d.id
+        GROUP BY d.id HAVING COUNT(*) < 100
         ORDER BY COUNT(*) DESC
-        LIMIT 5;
+        LIMIT 8;
     """
 
     query_list = execute_sql_query(query)
