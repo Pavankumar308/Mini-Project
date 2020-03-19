@@ -11,7 +11,7 @@ from .models import *
 def home_page(request):
      if request.method == 'POST':
           id = request.POST.get('delete')
-          movie = Movie.objects.get(id = id)
+          movie = Movie.objects.get(movie_id = id)
           movie.delete()
      movies_list = Movie.objects.all()
      context = {
@@ -22,7 +22,7 @@ def home_page(request):
 def movie_page(request, movie_id):
 
      actors_with_roles = []
-     movie = Movie.objects.get(id=movie_id)
+     movie = Movie.objects.get(movie_id=movie_id)
      actors = Actor.objects.filter(movies=movie).distinct()
      for actor in actors:
           actor_roles = {}
@@ -38,7 +38,7 @@ def movie_page(request, movie_id):
 
 def actor_page(request, actor_id):
 
-     actor = Actor.objects.get(id=actor_id)
+     actor = Actor.objects.get(actor_id=actor_id)
      cast = Cast.objects.filter(actor=actor)
      context = {
           'actor': actor,

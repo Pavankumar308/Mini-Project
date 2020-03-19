@@ -8,7 +8,7 @@
         <!-- DATA TABLE -->
         <h2 class="heading-title m-b-35"> {{ actor.name }}</h2>
         <div>
-            <img src="{{ actor.actor_image.url }}" height="300" width="300">
+            <img src="https://timesnext.com/wp-content/uploads/2019/12/facts-you-must-know-about-prabhas.jpg" height="300" width="300">
         </div>
         <div>
             <p class="director-note">
@@ -22,7 +22,6 @@
                 {% if movies %}
                 <thead>
                 <tr>
-                    <th>Movie id</th>
                     <th>Name</th>
                     <th>Release Date</th>
                     <th>Average Rating</th>
@@ -33,9 +32,8 @@
                 <tbody>
                     {% for movie in movies %}
                 <tr class="tr-shadow">
-                    <td>{{ movie.movie.id }}</td>
                     <td class="desc">
-                        <a href="/imdb/movie/{{ movie.movie.id }}/">{{ movie.movie.name }}</a>
+                        <a href="/imdb/movie/{{ movie.movie.movie_id }}/">{{ movie.movie.name }}</a>
                     </td>
                     <td>{{ movie.movie.release_date }}</td>
                     <td>

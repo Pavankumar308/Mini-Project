@@ -20,36 +20,66 @@ def get_imdb_multi_line_plot_with_area_data():
 
     get_movies_1 = """
         SELECT COUNT(*),
-            AVG(avg_rating)*10
+           (
+                SELECT COUNT(*)
+                FROM imdb_movie AS m
+                    INNER JOIN imdb_cast AS c
+                    ON m.movie_id = c.movie_id
+                    AND m.release_date  BETWEEN '1980-01-01' AND '1990-01-01'
+            )
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '1980-01-01' AND '1990-01-01';
     """
     get_movies_2 = """
         SELECT COUNT(*),
-            AVG(avg_rating)*10
+           (
+                SELECT COUNT(*)
+                FROM imdb_movie AS m
+                    INNER JOIN imdb_cast AS c
+                    ON m.movie_id = c.movie_id
+                    AND m.release_date  BETWEEN '1990-01-01' AND '2000-01-01'
+            )
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '1990-01-01' AND '2000-01-01';
     """
     get_movies_3 = """
         SELECT COUNT(*),
-            AVG(avg_rating)*10
+            (
+                SELECT COUNT(*)
+                FROM imdb_movie AS m
+                    INNER JOIN imdb_cast AS c
+                    ON m.movie_id = c.movie_id
+                    AND m.release_date  BETWEEN '2000-01-01' AND '2010-01-01'
+            )
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '2000-01-01' AND '2010-01-01';
     """
     get_movies_4 = """
         SELECT COUNT(*),
-            AVG(avg_rating) *10
+            (
+                SELECT COUNT(*)
+                FROM imdb_movie AS m
+                    INNER JOIN imdb_cast AS c
+                    ON m.movie_id = c.movie_id
+                    AND m.release_date  BETWEEN '2010-01-01' AND '2020-01-01'
+            )
         FROM imdb_movie
         WHERE release_date 
         BETWEEN '2010-01-01' AND '2020-01-01';
     """
     get_movies_5 = """
         SELECT COUNT(*),
-            AVG(avg_rating)*10
-        FROM imdb_movie
+            (
+                SELECT COUNT(*)
+                FROM imdb_movie AS m
+                    INNER JOIN imdb_cast AS c
+                    ON m.movie_id = c.movie_id
+                    AND m.release_date BETWEEN '2020-01-01' AND '2030-01-01'
+            )
+        FROM imdb_movie, imdb_cast
         WHERE release_date 
         BETWEEN '2020-01-01' AND '2030-01-01';
     """
@@ -72,10 +102,10 @@ def get_imdb_multi_line_plot_with_area_data():
                 ]
             },
             {
-                "label": "Avarage rating",
+                "label": "Number of actors",
                 "borderColor": "rgba(200, 123, 255, 0.9)",
                 "borderWidth": "1",
-                "backgroundColor": "rgba(255, 0, 0, 0.9)",
+                "backgroundColor": "rgba(0, 123, 255, 0.5)",
                 "pointHighlightStroke": "rgba(26,179,148,1)",
                 "data": [(execute_sql_query(get_movies_1)[0][1]),  
                             (execute_sql_query(get_movies_2)[0][1]),
@@ -90,7 +120,7 @@ def get_imdb_multi_line_plot_with_area_data():
     return {
         'multi_line_plot_with_area_data_one': json.dumps(
             multi_line_plot_with_area_data),
-        'multi_line_plot_with_area_data_one_title': 'Best movie seasons'
+        'multi_line_plot_with_area_data_one_title': 'Season wise movies and actors'
     }
 
 def get_imdb_multi_line_plot_data():
@@ -217,7 +247,6 @@ def single_imdb_bar_chart_data_one():
         actors_list.append(item[1])
     single_bar_chart_data = {
         "datasets": [{
-            'label': 'Number of actors',
             "data": actors_list,
             "backgroundColor": [
                 "#003f5c",
@@ -261,7 +290,7 @@ def get_imdb_polar_chart_data():
             ON d.id = m.director_id)
         INNER JOIN imdb_cast AS c
         ON m.movie_id = c.movie_id
-        GROUP BY d.id HAVING COUNT(*) < 100
+        GROUP BY d.id HAVING COUNT(*) < 100 AND COUNT(*) > 50
         ORDER BY COUNT(*) DESC
         LIMIT 8;
     """
@@ -279,9 +308,6 @@ def get_imdb_polar_chart_data():
             "data": actors_list,
             "backgroundColor": [
                 "#003f5c",
-                "#2f4b7c",
-                "#665191",
-                "#a05195",
                 "#d45087",
                 "#f95d6a",
                 "#ff7c43",

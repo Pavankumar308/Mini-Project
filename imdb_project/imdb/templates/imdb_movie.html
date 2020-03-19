@@ -8,7 +8,7 @@
         <!-- DATA TABLE -->
         <h2 class="heading-title m-b-35">{{ movie.name }}</h2>
         <div>
-            <img src="{{ movie.movie_poster.url }}" height="300" width="300">
+            <img src="https://upload.wikimedia.org/wikipedia/en/d/dc/Baahubali_The_Beginning_Movie_Poster.jpg" height="300" width="300">
         </div>
         <div>
             <p class="director-note">
@@ -24,7 +24,6 @@
                 {% if actors %}
                 <thead>
                 <tr>
-                    <th>Actor id</th>
                     <th>Name</th>
                     <th>Date of Birth</th>
                     <th>Role</th>
@@ -35,15 +34,29 @@
                 <tbody>
                     {% for actor in actors %}
                 <tr class="tr-shadow">
-                    <td>{{ actor.actor.id }}</td>
                     <td >
-                        <a href="/imdb/actor/{{ actor.actor.id }}/">{{ actor.actor.name }}</a>
+                        <a href="/imdb/actor/{{ actor.actor.actor_id }}/">{{ actor.actor.name }}</a>
                     </td>
                     <td>{{ actor.actor.date_of_birth }}</td>
                     <td>
                         {% for cast in actor.cast_list %}
                         {{ cast.role }}<br>
                         {% endfor %}
+                    </td>
+                    <td>
+                        <div class="table-data-feature">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete" value='{{ actor.actor.actor_id }}'>
+                                <button type="submit"
+                                        class="item"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 <tr class="spacer"></tr>

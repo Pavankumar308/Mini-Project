@@ -8,7 +8,7 @@
         <!-- DATA TABLE -->
         <h2 class="heading-title m-b-35">{{ director.name }} </h2>
         <div>
-            <img src="{{ director.director_image.url }}" height="300" width="300">
+            <img src="https://scontent.fmaa1-2.fna.fbcdn.net/v/t1.0-9/18582124_1510113022373522_4377511334014934473_n.jpg?_nc_cat=108&_nc_sid=85a577&_nc_ohc=zH_YMR9dt_kAX8mAZQD&_nc_ht=scontent.fmaa1-2.fna&oh=4af5cd06b68120d0c0a4753027b5357a&oe=5E94B6C9" height="300" width="300">
         </div>
         <div>
             <p class="director-note">
@@ -22,7 +22,6 @@
                 {% if movies %}
                 <thead>
                 <tr>
-                    <th>Movie id</th>
                     <th>Name</th>
                     <th>Release Date</th>
                     <th>Average Rating</th>
@@ -33,9 +32,8 @@
                 <tbody>
                     {% for movie in movies %}
                 <tr class="tr-shadow">
-                    <td>{{ movie.id }}</td>
                     <td class="desc">
-                        <a href="/imdb/movie/{{ movie.id }}/">{{ movie.name }}</a>
+                        <a href="/imdb/movie/{{ movie.movie_id }}/">{{ movie.name }}</a>
                     </td>
                     <td>{{ movie.release_date }}</td>
                     <td>

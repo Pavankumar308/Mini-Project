@@ -12,7 +12,6 @@
                 {% if movies_list %}
                 <thead>
                 <tr>
-                    <th>Movie Id</th>
                     <th>Name</th>
                     <th>Director</th>
                     <th>Release Date</th>
@@ -24,9 +23,8 @@
                 <tbody>
                 	{% for movie in movies_list %}
                 <tr class="tr-shadow">
-                    <td>{{ movie.id }}</td>
                     <td class="desc">
-                        <a href="/imdb/movie/{{ movie.id }}/">{{ movie.name }}</a>
+                        <a href="/imdb/movie/{{ movie.movie_id }}/">{{ movie.name }}</a>
                     </td>
                     <td class="desc">
                         <a href="/imdb/director/{{ movie.director.id }}/">{{ movie.director.name }}</a>
@@ -40,7 +38,7 @@
                         <div class="table-data-feature">
                             <form method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="delete" value='{{ movie.id }}'>
+                                <input type="hidden" name="delete" value='{{ movie.movie_id }}'>
                                 <button type="submit"
                                         class="item"
                                         data-toggle="tooltip"
