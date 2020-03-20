@@ -1,12 +1,8 @@
 from django.shortcuts import render
-
 from django.http import HttpResponse
-
 from .utils import *
-
 from .models import *
 # Create your views here.
-
 
 def home_page(request):
      if request.method == 'POST':
